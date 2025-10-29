@@ -41,23 +41,39 @@ The project includes both the **Machine Learning model** and a **Flask-based web
 
 ## 📂 Folder Structure
 Language Identification using Naive Bayes/
+
 │
+
 ├── dataset/
+
 │ └── Language Detection.csv
+
 │
+
 ├── models/
+
 │ └── naive_bayes_model.pkl
+
 │
+
 ├── static/
+
 │ └── style.css
+
 │
+
 ├── templates/
+
 │ ├── index.html
+
 │ └── result.html
 │
 ├── app.py
+
 ├── train_model.py
+
 ├── requirements.txt
+
 └── README.md
 
 ## 📊 Model Workflow
@@ -82,4 +98,5 @@ Real-time text detection in chat apps
 
 ## 👨‍💻 Author
 ## Sandip Randive
+
 
