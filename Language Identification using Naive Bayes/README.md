@@ -67,7 +67,9 @@ Language Identification using Naive Bayes/
 │ ├── index.html
 
 │ └── result.html
+
 │
+
 ├── app.py
 
 ├── train_model.py
@@ -98,5 +100,6 @@ Real-time text detection in chat apps
 
 ## 👨‍💻 Author
 ## Sandip Randive
+
 
 
