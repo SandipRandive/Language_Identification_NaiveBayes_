@@ -64,15 +64,22 @@ Language Identification using Naive Bayes/
 Data Cleaning → TF-IDF Vectorization → Naive Bayes Classification → Prediction
 
 **Data Preprocessing**: Remove noise, handle missing values
+
 **Vectorization**: Convert text into numeric vectors using TF-IDF
+
 **Model Training**: Multinomial Naive Bayes
+
 **Prediction**: Model predicts the most probable language
 
 ## 🌱 Future Enhancements
 Support for more languages
+
 Integration with a REST API
+
 Improved accuracy using deep learning models
+
 Real-time text detection in chat apps
 
 ## 👨‍💻 Author
 ## Sandip Randive
+
