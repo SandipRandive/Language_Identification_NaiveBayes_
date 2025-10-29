@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Language Detection Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #ffb3b3, #ffd6a5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        .card {
+            background: #fff;
+            padding: 25px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 450px;
+        }
+        h1 {
+            color: #e63946;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #e63946;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        a:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🌍 Language Detection Result</h1>
+        <div class="result">
+            <p><strong>Entered Text:</strong> {{ text }}</p>
+            <p><strong>Detected Language:</strong> {{ lang }}</p>
+            <p><strong>Confidence:</strong> {{ confidence }}%</p>
+        </div>
+
+        <canvas id="confidenceChart" width="400" height="300"></canvas>
+
+        <a href="/">🔙 Try Another</a>
+    </div>
+
+    <script>
+        const chartData = {{ chart_data|tojson }};
+        const labels = chartData.map(item => item.lang);
+        const values = chartData.map(item => item.prob);
+
+        new Chart(document.getElementById('confidenceChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Confidence (%)',
+                    data: values,
+                    backgroundColor: [
+                        '#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff',
+                        '#a0c4ff', '#bdb2ff', '#ffc6ff'
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

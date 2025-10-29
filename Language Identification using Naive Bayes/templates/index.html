@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Language Detector</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1f4037, #99f2c8);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: all 0.5s ease;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      width: 400px;
+      backdrop-filter: blur(10px);
+      transition: all 0.5s ease;
+    }
+
+    textarea {
+      width: 90%;
+      height: 100px;
+      border-radius: 10px;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      outline: none;
+      resize: none;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 25px;
+      background-color: #00c6ff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #0072ff;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    /* 🌙 Light Mode */
+    body.light-mode {
+      background: linear-gradient(135deg, #f8f9fa, #dfe6e9);
+      color: #222;
+    }
+    .light-mode .container {
+      background: rgba(0, 0, 0, 0.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* 🌗 Toggle Button */
+    .toggle-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: transparent;
+      border: 2px solid white;
+      border-radius: 25px;
+      padding: 8px 16px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .toggle-btn:hover {
+      background-color: white;
+      color: #333;
+    }
+    .light-mode .toggle-btn {
+      border-color: #333;
+      color: #333;
+    }
+    .light-mode .toggle-btn:hover {
+      background-color: #333;
+      color: white;
+    }
+
+    /* 🌀 Loader Animation */
+    .loader {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    .spinner {
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top: 6px solid #00c6ff;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: white;
+      font-size: 20px;
+      margin-top: 20px;
+      text-align: center;
+      height: 30px;
+      min-width: 250px;
+      overflow: hidden;
+      border-right: 2px solid #00c6ff;
+      white-space: nowrap;
+      animation: blinkCursor 0.8s infinite;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #00c6ff; }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" onclick="toggleMode()">🌙 Dark Mode</button>
+
+  <div class="container">
+    <h1>🌐 Language Detector</h1>
+    <form action="/predict" method="POST" onsubmit="showLoader()">
+      <textarea name="text" placeholder="Type or paste text here..." required></textarea><br>
+      <button type="submit">Detect Language</button>
+    </form>
+  </div>
+
+  <!-- 🌀 Loader Section -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText"></div>
+  </div>
+
+  <script>
+    // 🌗 Dark/Light Mode
+    function toggleMode() {
+      document.body.classList.toggle("light-mode");
+      const isLight = document.body.classList.contains("light-mode");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      document.querySelector(".toggle-btn").innerText = isLight ? "🌞 Light Mode" : "🌙 Dark Mode";
+    }
+
+    window.onload = function() {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        document.querySelector(".toggle-btn").innerText = "🌞 Light Mode";
+      }
+    };
+
+    // 🧠 Loader Typing Animation
+    const loaderTexts = [
+      "Analyzing text...",
+      "Detecting language...",
+      "Almost done..."
+    ];
+
+    let textIndex = 0;
+    let charIndex = 0;
+
+    function typeEffect() {
+      const textElement = document.getElementById("loadingText");
+      if (charIndex < loaderTexts[textIndex].length) {
+        textElement.textContent += loaderTexts[textIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeEffect, 100);
+      } else {
+        setTimeout(() => {
+          charIndex = 0;
+          textIndex = (textIndex + 1) % loaderTexts.length;
+          textElement.textContent = "";
+          typeEffect();
+        }, 1000);
+      }
+    }
+
+    // 🌀 Show Loader
+    function showLoader() {
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("loadingText").textContent = "";
+      textIndex = 0;
+      charIndex = 0;
+      typeEffect();
+    }
+  </script>
+</body>
+</html>
